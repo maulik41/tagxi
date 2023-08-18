@@ -25,4 +25,13 @@ Route::namespace ('Api')->group(function () {
 		include_route_files('api/v1');
 	});
 
+    //zone wise driver
+
+    Route::post('zone-wise-drivers','ZoneApiController@zoneWiseDriver');
+    Route::get('get-zone-name','ZoneApiController@getZoneName');
+    Route::post('trip-accept-driver','ZoneApiController@tripAcceptedByDriver');
+    Route::post('zone-map-details','ZoneApiController@zoneMap');
+    Route::get('accepted-trip-driver','ZoneApiController@acceptedTripDriver');
+
+
 });

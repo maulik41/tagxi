@@ -16,6 +16,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
 use App\Models\Admin\CancellationReason;
 use App\Models\Master\PackageType;
 use App\Models\Admin\Owner;
+use App\Models\Admin\Zone;
 
 class Request extends Model
 {
@@ -40,7 +41,7 @@ class Request extends Model
     * @var array
     */
     protected $appends = [
-        'vehicle_type_name','pick_lat','pick_lng','drop_lat','drop_lng','pick_address','drop_address','converted_trip_start_time','converted_arrived_at','converted_accepted_at','converted_completed_at','converted_cancelled_at','converted_created_at','converted_updated_at','vehicle_type_image'
+        'vehicle_type_name','pick_lat','pick_lng','drop_lat','drop_lng','pick_address','drop_address','converted_trip_start_time','converted_arrived_at','converted_accepted_at','converted_completed_at','converted_cancelled_at','converted_created_at','converted_updated_at','vehicle_type_image','zone_name'
     ];
     /**
      * The relationships that can be loaded with query string filtering includes.
@@ -61,8 +62,8 @@ class Request extends Model
     public function requestPlace()
     {
         return $this->hasOne(RequestPlace::class, 'request_id', 'id');
-    } 
-    
+    }
+
     public function requestRating()
     {
         return $this->hasMany(RequestRating::class, 'request_id','id');
@@ -167,6 +168,17 @@ class Request extends Model
         }
         return $this->requestPlace->pick_lng;
     }
+
+    public function getZoneNameAttribute()
+    {
+        if(!empty($this->zone_type_id)) {
+            $zone_id = zoneType::where('id',$this->zone_type_id)->firstOrFail()->zone_id;
+            return $zone_name = Zone::where('id',$zone_id)->first()->name;
+        }else{
+            return null;
+        }
+
+  }
     /**
     * Get request's drop latitude.
     *
@@ -279,7 +291,12 @@ class Request extends Model
         if ($this->accepted_at==null) {
             return null;
         }
-        $timezone = $this->serviceLocationDetail->timezone?:env('SYSTEM_DEFAULT_TIMEZONE');
+        if($this->serviceLocationDetail) {
+
+            $timezone = $this->serviceLocationDetail->timezone?:env('SYSTEM_DEFAULT_TIMEZONE');
+        }else{
+            $timezone = env('SYSTEM_DEFAULT_TIMEZONE');
+        }
         return Carbon::parse($this->accepted_at)->setTimezone($timezone)->format('jS M h:i A');
     }
     /**
@@ -377,6 +394,6 @@ class Request extends Model
     public function cancelReason()
     {
          return $this->hasOne(CancellationReason::class, 'id', 'reason');
-       
+
     }
 }

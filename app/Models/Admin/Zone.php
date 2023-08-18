@@ -76,8 +76,8 @@ class Zone extends Model
     public function zoneType()
     {
         return $this->hasMany(ZoneType::class, 'zone_id', 'id');
-    } 
-   
+    }
+
 
     public function zoneSurge()
     {
@@ -116,6 +116,11 @@ class Zone extends Model
         }
         $timezone = auth()->user()->timezone?:env('SYSTEM_DEFAULT_TIMEZONE');
         return Carbon::parse($this->updated_at)->setTimezone($timezone)->format('jS M h:i A');
+    }
+
+    public function driver()
+    {
+        return $this->hasMany(Driver::class,'service_location_id','service_location_id');
     }
 
     protected $searchable = [

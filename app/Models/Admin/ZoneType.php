@@ -24,7 +24,7 @@ class ZoneType extends Model
      * @var array
      */
     protected $fillable = [
-        'zone_id', 'type_id','payment_type','active','bill_status','admin_commision_type','admin_commision','service_tax',
+        'id','zone_id', 'type_id','payment_type','active','bill_status','admin_commision_type','admin_commision','service_tax',
     ];
 
     /**
@@ -55,7 +55,7 @@ class ZoneType extends Model
         return $this->belongsTo(Zone::class, 'zone_id', 'id');
     }
 
-   
+
 
     /**
     * Get vehicle type's name.

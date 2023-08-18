@@ -138,7 +138,7 @@ class Driver extends Model
     public function currentRide(){
 
         return $this->requestDetail()->where('is_completed',false)->where('is_cancelled',false)->exists();
-        
+
     }
     public function driverAvailabilities()
     {
@@ -157,11 +157,11 @@ class Driver extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
-    } 
+    }
     public function serviceLocation()
     {
         return $this->belongsTo(ServiceLocation::class, 'service_location_id', 'id');
-    } 
+    }
    public function owner()
     {
         return $this->belongsTo(Owner::class, 'owner_id', 'id');
